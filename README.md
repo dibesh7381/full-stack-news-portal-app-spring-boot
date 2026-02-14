@@ -41,6 +41,7 @@ Built using **React** for the frontend and **Spring Boot** for the backend.
 * Spring Security
 * Spring Data JPA
 * PostgreSQL
+* Flyway Schema Migration
 * JWT Authentication
 
 ### Cloud Services
