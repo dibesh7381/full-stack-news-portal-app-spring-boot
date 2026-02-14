@@ -55,8 +55,8 @@ Built using **React** for the frontend and **Spring Boot** for the backend.
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/news-portal.git
-cd news-portal
+git clone https://github.com/dibesh7381/full-stack-news-portal-app-spring-boot
+cd full-stack-news-portal-app-spring-boot
 ```
 
 ---
@@ -66,7 +66,7 @@ cd news-portal
 Navigate to backend folder:
 
 ```bash
-cd backend
+cd NewsPortalApp
 ```
 
 Update `application.properties`:
