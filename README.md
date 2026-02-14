@@ -12,6 +12,7 @@ Built using **React** for the frontend and **Spring Boot** for the backend.
 * View all news articles
 * Like and dislike news
 * Comment on articles
+* Edit delete comments
 * Real-time timestamp display
 
 ### Reporter
@@ -70,7 +71,7 @@ cd backend
 Update `application.properties`:
 
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/newsdb
+spring.datasource.url=jdbc:postgresql://localhost:5432/news_portal
 spring.datasource.username=your_username
 spring.datasource.password=your_password
 
@@ -100,7 +101,7 @@ http://localhost:8080
 Navigate to frontend folder:
 
 ```bash
-cd frontend
+cd frontend/pj
 ```
 
 Install dependencies:
