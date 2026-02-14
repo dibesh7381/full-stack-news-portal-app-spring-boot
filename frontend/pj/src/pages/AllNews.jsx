@@ -41,13 +41,27 @@ export default function AllNews() {
       const newsData = res.data.data;
       setNews(newsData);
 
+      // fetch reaction for each news
       newsData.forEach(async (item) => {
         const r = await axios.get(`${REACTION_API}/${item.id}`, {
           headers,
         });
+
+        const data = r.data.data;
+
+        // store counts
         setReactions((prev) => ({
           ...prev,
-          [item.id]: r.data.data,
+          [item.id]: {
+            likes: data.likes,
+            dislikes: data.dislikes,
+          },
+        }));
+
+        // store user reaction
+        setUserReactions((prev) => ({
+          ...prev,
+          [item.id]: data.userReaction,
         }));
       });
     } catch (err) {
@@ -62,30 +76,28 @@ export default function AllNews() {
   // ---------- REACTIONS ----------
   const react = async (newsId, type) => {
     try {
-      const currentReaction = userReactions[newsId];
-
       const res = await axios.post(
         `${REACTION_API}/${newsId}`,
         { reaction: type },
-        { headers },
+        { headers }
       );
 
+      const data = res.data.data;
+
+      // update counts
       setReactions((prev) => ({
         ...prev,
-        [newsId]: res.data.data,
+        [newsId]: {
+          likes: data.likes,
+          dislikes: data.dislikes,
+        },
       }));
 
-      setUserReactions((prev) => {
-        const updated = { ...prev };
-
-        if (currentReaction === type) {
-          delete updated[newsId];
-        } else {
-          updated[newsId] = type;
-        }
-
-        return updated;
-      });
+      // update user reaction
+      setUserReactions((prev) => ({
+        ...prev,
+        [newsId]: data.userReaction,
+      }));
     } catch (err) {
       console.error("Reaction failed", err);
     }
@@ -119,7 +131,7 @@ export default function AllNews() {
     await axios.post(
       `${COMMENT_API}/${newsId}/comments`,
       { content },
-      { headers },
+      { headers }
     );
 
     const res = await axios.get(`${COMMENT_API}/${newsId}/comments`, {
@@ -154,13 +166,13 @@ export default function AllNews() {
     const res = await axios.put(
       `${COMMENT_API}/${newsId}/comments/${commentId}`,
       { content: editText },
-      { headers },
+      { headers }
     );
 
     setComments((prev) => ({
       ...prev,
       [newsId]: prev[newsId].map((c) =>
-        c.id === commentId ? res.data.data : c,
+        c.id === commentId ? res.data.data : c
       ),
     }));
 
@@ -213,7 +225,7 @@ export default function AllNews() {
                   </span>
                 </div>
 
-                {/* Your News Badge */}
+                {/* Owner Badge */}
                 {isOwner && (
                   <div className="absolute top-3 right-3">
                     <span className="bg-blue-600 text-white text-xs px-3 py-1 rounded-full shadow">
@@ -240,7 +252,9 @@ export default function AllNews() {
                     onClick={() => react(item.id, "LIKE")}
                     disabled={isOwner}
                     className={`w-20 px-3 py-1.5 rounded-full text-xs font-medium flex items-center justify-center gap-1 ${
-                      userReaction === "LIKE" ? "bg-green-200" : "bg-green-100"
+                      userReaction === "LIKE"
+                        ? "bg-green-600 text-white"
+                        : "bg-green-100 text-green-700"
                     }`}
                   >
                     👍 <span className="w-5 text-center">{counts.likes}</span>
@@ -250,11 +264,15 @@ export default function AllNews() {
                     onClick={() => react(item.id, "DISLIKE")}
                     disabled={isOwner}
                     className={`w-20 px-3 py-1.5 rounded-full text-xs font-medium flex items-center justify-center gap-1 ${
-                      userReaction === "DISLIKE" ? "bg-red-200" : "bg-red-100"
+                      userReaction === "DISLIKE"
+                        ? "bg-red-600 text-white"
+                        : "bg-red-100 text-red-700"
                     }`}
                   >
                     👎{" "}
-                    <span className="w-5 text-center">{counts.dislikes}</span>
+                    <span className="w-5 text-center">
+                      {counts.dislikes}
+                    </span>
                   </button>
 
                   <button
@@ -265,7 +283,7 @@ export default function AllNews() {
                   </button>
                 </div>
 
-                {/* Comments */}
+                {/* Comments Section */}
                 {openComments[item.id] && (
                   <div className="mt-4 border-t pt-3">
                     {!isOwner && (
@@ -376,3 +394,4 @@ export default function AllNews() {
     </div>
   );
 }
+
