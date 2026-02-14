@@ -77,10 +77,19 @@ public class NewsReactionService {
         long likes = reactionRepository.countByNewsIdAndReaction(newsId, "LIKE");
         long dislikes = reactionRepository.countByNewsIdAndReaction(newsId, "DISLIKE");
 
-        return new ReactionResponseDto(likes, dislikes);
+        // get current user reaction
+        NewsReaction currentReaction = reactionRepository
+                .findByUserIdAndNewsId(userId, newsId)
+                .orElse(null);
+
+        String userReaction = currentReaction != null
+                ? currentReaction.getReaction()
+                : null;
+
+        return new ReactionResponseDto(likes, dislikes, userReaction);
     }
 
-    public ReactionResponseDto getReactionCounts(Long newsId) {
+    public ReactionResponseDto getReactionCounts(Long userId, Long newsId) {
 
         newsRepository.findById(newsId)
                 .orElseThrow(() -> new CustomApiException(
@@ -91,8 +100,17 @@ public class NewsReactionService {
         long likes = reactionRepository.countByNewsIdAndReaction(newsId, "LIKE");
         long dislikes = reactionRepository.countByNewsIdAndReaction(newsId, "DISLIKE");
 
-        return new ReactionResponseDto(likes, dislikes);
+        NewsReaction reaction = reactionRepository
+                .findByUserIdAndNewsId(userId, newsId)
+                .orElse(null);
+
+        String userReaction = reaction != null
+                ? reaction.getReaction()
+                : null;
+
+        return new ReactionResponseDto(likes, dislikes, userReaction);
     }
 }
+
 
 

@@ -36,17 +36,19 @@ public class NewsReactionController {
         );
     }
 
-    // GET reaction counts
     @GetMapping("/{newsId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponseDto<ReactionResponseDto>> getReactions(
-            @PathVariable Long newsId) {
+            @PathVariable Long newsId,
+            Authentication authentication) {
+
+        Long userId = (Long) authentication.getPrincipal();
 
         ReactionResponseDto response =
-                reactionService.getReactionCounts(newsId);
+                reactionService.getReactionCounts(userId, newsId);
 
         return ResponseEntity.ok(
-                new ApiResponseDto<>(true, "Reaction counts fetched", response)
+                new ApiResponseDto<>(true, "Reaction fetched", response)
         );
     }
 }

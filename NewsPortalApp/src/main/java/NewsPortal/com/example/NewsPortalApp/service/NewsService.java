@@ -60,36 +60,12 @@ public class NewsService {
 
     // GET REPORTER NEWS
     public List<NewsResponseDto> getMyNews(Long userId) {
-
-        List<News> newsList = newsRepository.findByReporterId(userId);
-
-        return newsList.stream()
-                .map(n -> new NewsResponseDto(
-                        n.getId(),
-                        n.getTitle(),
-                        n.getDescription(),
-                        n.getImageUrl(),
-                        n.getCreatedAt()
-                ))
-                .toList();
+        return newsRepository.findMyNews(userId);
     }
 
     // GET ALL NEWS (PUBLIC)
     public List<AllNewsResponseDto> getAllNews() {
-
-        List<News> newsList = newsRepository.findAllByOrderByCreatedAtDesc();
-
-        return newsList.stream()
-                .map(n -> new AllNewsResponseDto(
-                        n.getId(),
-                        n.getTitle(),
-                        n.getDescription(),
-                        n.getImageUrl(),
-                        n.getReporter().getId(),       // reporterId added
-                        n.getReporter().getUsername(),
-                        n.getCreatedAt()
-                ))
-                .toList();
+        return newsRepository.findAllNewsDto();
     }
 
 
