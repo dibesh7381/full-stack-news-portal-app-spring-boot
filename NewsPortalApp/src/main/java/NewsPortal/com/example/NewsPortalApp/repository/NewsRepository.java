@@ -12,20 +12,22 @@ import java.util.List;
 
 public interface NewsRepository extends JpaRepository<News, Long> {
 
-    // REPORTER OWN NEWS (JPQL + DTO)
+    // REPORTER OWN NEWS (JPQL + DTO) - explicit join
     @Query("""
-        SELECT new NewsPortal.com.example.NewsPortalApp.dto.NewsResponseDto(
-            n.id,
-            n.title,
-            n.description,
-            n.imageUrl,
-            n.createdAt
-        )
-        FROM News n
-        WHERE n.reporter.id = :reporterId
-        ORDER BY n.createdAt DESC
-    """)
+    SELECT new NewsPortal.com.example.NewsPortalApp.dto.NewsResponseDto(
+        n.id,
+        n.title,
+        n.description,
+        n.imageUrl,
+        n.createdAt
+    )
+    FROM News n
+    JOIN n.reporter r
+    WHERE r.id = :reporterId
+    ORDER BY n.createdAt DESC
+""")
     List<NewsResponseDto> findMyNews(@Param("reporterId") Long reporterId);
+
 
 
     // PUBLIC ALL NEWS (JPQL + DTO)
