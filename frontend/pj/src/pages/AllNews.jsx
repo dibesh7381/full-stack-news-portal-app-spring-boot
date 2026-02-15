@@ -246,6 +246,10 @@ export default function AllNews() {
                   {item.description}
                 </p>
 
+                <p className="text-xs text-gray-500 mt-1">
+                  By <span className="font-semibold">{item.reporterName}</span>
+                </p>
+
                 {/* Reactions */}
                 <div className="flex gap-2 mt-4 items-center">
                   <button
