@@ -79,7 +79,7 @@ export default function AllNews() {
       const res = await axios.post(
         `${REACTION_API}/${newsId}`,
         { reaction: type },
-        { headers }
+        { headers },
       );
 
       const data = res.data.data;
@@ -131,7 +131,7 @@ export default function AllNews() {
     await axios.post(
       `${COMMENT_API}/${newsId}/comments`,
       { content },
-      { headers }
+      { headers },
     );
 
     const res = await axios.get(`${COMMENT_API}/${newsId}/comments`, {
@@ -166,13 +166,13 @@ export default function AllNews() {
     const res = await axios.put(
       `${COMMENT_API}/${newsId}/comments/${commentId}`,
       { content: editText },
-      { headers }
+      { headers },
     );
 
     setComments((prev) => ({
       ...prev,
       [newsId]: prev[newsId].map((c) =>
-        c.id === commentId ? res.data.data : c
+        c.id === commentId ? res.data.data : c,
       ),
     }));
 
@@ -242,12 +242,15 @@ export default function AllNews() {
 
                 <h2 className="text-lg font-semibold mt-3">{item.title}</h2>
 
-                <p className="text-gray-600 text-sm mt-2 leading-relaxed">
-                  {item.description}
-                </p>
+                <div className="mt-2 h-24 overflow-y-auto pr-1">
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
 
                 <p className="text-xs text-gray-500 mt-1">
-                  By <span className="font-semibold">{item.reporterName}</span>
+                  Post By{" "}
+                  <span className="font-semibold">{item.reporterName}</span>
                 </p>
 
                 {/* Reactions */}
@@ -274,9 +277,7 @@ export default function AllNews() {
                     }`}
                   >
                     👎{" "}
-                    <span className="w-5 text-center">
-                      {counts.dislikes}
-                    </span>
+                    <span className="w-5 text-center">{counts.dislikes}</span>
                   </button>
 
                   <button
@@ -398,4 +399,3 @@ export default function AllNews() {
     </div>
   );
 }
-
