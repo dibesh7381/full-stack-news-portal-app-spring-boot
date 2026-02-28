@@ -125,6 +125,13 @@ public class AuthService {
                 token
         );
     }
+
+    public AboutPageDto aboutPage(){
+        AboutPageDto dto = new AboutPageDto();
+        dto.setName("About Page");
+        dto.setContent("This is about About Page");
+        return dto;
+    }
 }
 
 

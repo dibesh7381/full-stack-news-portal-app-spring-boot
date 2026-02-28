@@ -90,6 +90,16 @@ public class AuthController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @GetMapping("/about")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<ApiResponseDto<AboutPageDto>> AboutPage(){
+        AboutPageDto response = authService.aboutPage();
+        ApiResponseDto<AboutPageDto> aboutPages =
+                new ApiResponseDto<>(true, "This is about page routes", response);
+
+        return ResponseEntity.ok(aboutPages);
+    }
+
 }
 
 
